@@ -8,21 +8,43 @@ public class main {
     public static void main(String[] args) throws IOException, GeneralSecurityException
     { 	       	
     	   	
-		/**** Sample Input ****/		
-    	/*
+		/**** Sample Input for username password authen****/		
+    	/* username/password 
 		 * String inputFile = resources/pdfA3.pdf;
     	String tsaUrl = "http://test.time.teda.th";
     	String tsaUsername = ""; 
     	String tsaPassword = "";  
 		*/
     	
+    	/*
     	String inputFile = args[0];
     	String tsaUrl = args[1];
-    	String tsaUsername = args[2]; 
-    	String tsaPassword = args[3];    	   	    	
+    	String keystoreFile = args[2]; 
+    	String keystorePassword = args[3];    	   	    
+    	String  keystoreType = args[4];  
+    	*/	
     	
-        // sign PDF
-        CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
+		/**** Sample Input for certificate authen ****/		
+    	/* username/password 
+		 * String inputFile = resources/pdfA3.pdf;
+    	String tsaUrl = "https://test.time.teda.th";
+    	String keystoreFile = ""; 
+    	String keystorePassword = "";  
+    	String keystoreType = "";  
+		*/    	
+
+    	String inputFile = args[0];
+    	String tsaUrl = args[1];
+    	String keystoreFile = args[2]; 
+    	String keystorePassword = args[3];    	   	    
+    	String  keystoreType = args[4];   
+    	
+
+        // sign PDF (Certificate authen)
+        CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,keystoreFile,keystorePassword,keystoreType);
+        
+        // sign PDF (Username , Password authen)
+        //CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
 
         File inFile = new File(inputFile);
         String name = inFile.getName();
@@ -30,7 +52,6 @@ public class main {
 
         File outFile = new File(inFile.getParent(), substring + "_timestamped.pdf");
         signing.signDetached(inFile, outFile);
-        
 
 		System.out.println("********TimeStamp Done**********");
     }

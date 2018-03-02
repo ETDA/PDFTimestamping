@@ -20,8 +20,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +67,15 @@ public class ValidationTimeStamp
             this.tsaClient = new TSAClient(new URL(tsaUrl), tsaUsername, tsaPassword, digest);
         }
     }
+    
+    public ValidationTimeStamp(String tsaUrl,String keystoreFile,String keystorePassword,String keystoreType) throws NoSuchAlgorithmException, MalformedURLException
+    {
+        if (tsaUrl != null)
+        {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            this.tsaClient = new TSAClient(new URL(tsaUrl), keystoreFile, keystorePassword,keystoreType, digest);
+        }
+    }
 
     /**
      * Creates a signed timestamp token by the given input stream.
@@ -70,8 +83,13 @@ public class ValidationTimeStamp
      * @param content InputStream of the content to sign
      * @return the byte[] of the timestamp token
      * @throws IOException
+     * @throws CertificateException 
+     * @throws NoSuchAlgorithmException 
+     * @throws KeyStoreException 
+     * @throws KeyManagementException 
+     * @throws UnrecoverableKeyException 
      */
-    public byte[] getTimeStampToken(InputStream content) throws IOException
+    public byte[] getTimeStampToken(InputStream content) throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
     {
         return tsaClient.getTimeStampToken(IOUtils.toByteArray(content));
     }
@@ -82,9 +100,14 @@ public class ValidationTimeStamp
      * @param signedData Generated CMS signed data
      * @return CMSSignedData Extended CMS signed data
      * @throws IOException
+     * @throws CertificateException 
+     * @throws NoSuchAlgorithmException 
+     * @throws KeyStoreException 
+     * @throws KeyManagementException 
+     * @throws UnrecoverableKeyException 
      */
     public CMSSignedData addSignedTimeStamp(CMSSignedData signedData)
-            throws IOException
+            throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
     {
         SignerInformationStore signerStore = signedData.getSignerInfos();
         List<SignerInformation> newSigners = new ArrayList<>();
@@ -106,9 +129,14 @@ public class ValidationTimeStamp
      * @param signer information about signer
      * @return information about SignerInformation
      * @throws IOException
+     * @throws CertificateException 
+     * @throws NoSuchAlgorithmException 
+     * @throws KeyStoreException 
+     * @throws KeyManagementException 
+     * @throws UnrecoverableKeyException 
      */
     private SignerInformation signTimeStamp(SignerInformation signer)
-            throws IOException
+            throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
     {
         AttributeTable unsignedAttributes = signer.getUnsignedAttributes();
 

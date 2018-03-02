@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,9 +34,13 @@ import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface
 
 public class CreateSignedTimeStamp implements SignatureInterface {
 	  private static final Log LOG = LogFactory.getLog(CreateSignedTimeStamp.class);
-    private final String tsaUrl;
-    private final String tsaUsername;
-    private final String tsaPassword;
+    private  String tsaUrl;
+    private String tsaUsername ;
+    private  String tsaPassword;
+    public   String keystorePath;
+    public  String keystorePassword;
+    public  String keystoreType;
+
     /**
      * Initialize the signed timestamp creator
      * 
@@ -43,6 +51,14 @@ public class CreateSignedTimeStamp implements SignatureInterface {
         this.tsaUrl = tsaUrl;
         this.tsaUsername = tsaUsername;
         this.tsaPassword = tsaPassword;
+    }
+    
+    public CreateSignedTimeStamp(String tsaUrl,String keystorePath,String keystorePassword,String keystoreType )
+    {
+        this.tsaUrl = tsaUrl;
+        this.keystorePath = keystorePath;
+        this.keystorePassword = keystorePassword;
+        this.keystoreType = keystoreType;
     }
     
     /**
@@ -118,10 +134,17 @@ public class CreateSignedTimeStamp implements SignatureInterface {
         ValidationTimeStamp validation;
         try
         {
-            validation = new ValidationTimeStamp(tsaUrl,tsaUsername,tsaPassword);
-            return validation.getTimeStampToken(content);
+        	if(tsaUsername != null && tsaPassword  != null)
+        	{ 
+        		validation = new ValidationTimeStamp(tsaUrl,tsaUsername,tsaPassword);
+        		return validation.getTimeStampToken(content);
+            }
+        	else {
+        		validation = new ValidationTimeStamp(tsaUrl,keystorePath,keystorePassword,keystoreType);
+        		return validation.getTimeStampToken(content);
+        	}
         }
-        catch (NoSuchAlgorithmException e)
+        catch (NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException | KeyStoreException | CertificateException e)
         {
             LOG.error("Hashing-Algorithm not found for TimeStamping", e);
         }
