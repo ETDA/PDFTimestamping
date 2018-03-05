@@ -15,3 +15,6 @@ target/
 
 # Vscode
 .vscode/
+
+# output example
+resources/pdfA3_timestamped.pdf
