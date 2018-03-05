@@ -139,7 +139,7 @@ public class CreateSignedTimeStamp implements SignatureInterface {
         		validation = new ValidationTimeStamp(tsaUrl,tsaUsername,tsaPassword);
         		return validation.getTimeStampToken(content);
             }
-        	else {
+        	else if(tsaUrl != null && keystorePath  != null && keystorePassword  != null && keystoreType  != null ) {
         		validation = new ValidationTimeStamp(tsaUrl,keystorePath,keystorePassword,keystoreType);
         		return validation.getTimeStampToken(content);
         	}
