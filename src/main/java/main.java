@@ -17,10 +17,12 @@ public class main {
 		*/
     	
     	
-    	String inputFile = args[0];
+    	/*String inputFile = args[0];
     	String tsaUrl = args[1];
     	String tsaUsername = args[2]; 
     	String tsaPassword = args[3];   		
+    	*/
+    	
     	
 		/**** Sample Input for certificate authen ****/		
     	/* username/password 
@@ -31,18 +33,18 @@ public class main {
     	String keystoreType = "";  
 		*/    	
 
-    	/*String inputFile = args[0];
+    	String inputFile = args[0];
     	String tsaUrl = args[1];
     	String keystoreFile = args[2]; 
     	String keystorePassword = args[3];    	   	    
     	String  keystoreType = args[4];   
-    	*/
+    	
 
         // sign PDF (Certificate authen)
-        //CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,keystoreFile,keystorePassword,keystoreType);
+        CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,keystoreFile,keystorePassword,keystoreType);
         
         // sign PDF (Username , Password authen)
-        CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
+        //CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
 
         File inFile = new File(inputFile);
         String name = inFile.getName();
