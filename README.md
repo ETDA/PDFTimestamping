@@ -1,8 +1,8 @@
 # PDF Timestamping
   
-โปรเจกต์ PDFTimestamping เป็นโปรเจคสำหรับทำ Timestamp บนไฟล์ PDF ที่ถูกพัฒนาด้วยภาษา JAVA โดยใช้ Library PDFBox ในการเรียก TSAClient จาก TSA
+โปรเจกต์ PDFTimestamping เป็นโปรเจคสำหรับทำ Timestamp บนไฟล์ PDF ที่ถูกพัฒนาด้วยภาษา JAVA โดยใช้ Library PDFBox ในการเรียก TSAClient จาก TSA (Time-Stamp Authority)
 
-  นอกจาก source code ตัวอย่างในการทำ Timestamp ทาง สพธอ. ยังมีการให้บริการ TSA (Time-Stamp Authority) ด้วย โดยสามารถติดต่อขอรับการใช้บริการได้ทางเบอร์โทรศัพท์ 02-123-1234
+นอกจาก source code ตัวอย่างในการทำ Timestamp ทาง สพธอ. ยังมีการให้บริการ TSA  ด้วย โดยสามารถติดต่อขอรับการใช้บริการได้ทางเบอร์โทรศัพท์ 02-123-1234
 
 ## Prerequisites
 - JDK 1.8
@@ -44,14 +44,33 @@
     */
     CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,keystoreFile,keystorePassword,keystoreType);
     
-    //Set Input Instance  
+    /*Set Input Instance*/  
     File inFile = new File(inputFile);
     String name = inFile.getName();
     String substring = name.substring(0, name.lastIndexOf('.'));
     
-    //Set Output Instance
+    /*Set Output Instance*/
     File outFile = new File(inFile.getParent(), substring + "_timestamped.pdf");
     
-    // Do Timestaping
+    /*Do Timestaping*/
     signing.signDetached(inFile, outFile);
     
+  ### Timestamp Client
+    /*
+    * If Timestamp for PDF is not your choice here are guidance for TSAClient calling only 
+    */		
+    
+    /*Create MD5 Instance with SHA-256 Algorithm*/
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		
+		/*Create TSAClient for certificate authen (we modified TSAClent class to support certificate authen method)*/
+		TSAClient clientCert = new TSAClient(new URL(tsaUrl),keystoreFile,keystorePassword,keystoreType,digest);
+		
+		/*Create TSAClient for username and password ( modified TSAClent class to support certificate authen method)*/
+		//TSAClient clientUsername = new TSAClient(new URL(tsaUrl),username, password, digest);
+		
+		/*Example data directly from byte*/
+		byte[] data = "testcontent".getBytes("UTF-8");		
+		
+		/*get TimeStampToken*/ 
+		byte[] clientByte =  clientCert.getTimeStampToken(messageDigest);
