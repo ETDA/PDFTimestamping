@@ -56,21 +56,22 @@
     signing.signDetached(inFile, outFile);
     
   ### Timestamp Client
+  
     /*
     * If Timestamp for PDF is not your choice here are guidance for TSAClient calling only 
     */		
     
     /*Create MD5 Instance with SHA-256 Algorithm*/
-		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+    MessageDigest digest = MessageDigest.getInstance("SHA-256");
 		
-		/*Create TSAClient for certificate authen (we modified TSAClent class to support certificate authen method)*/
-		TSAClient clientCert = new TSAClient(new URL(tsaUrl),keystoreFile,keystorePassword,keystoreType,digest);
+    /*Create TSAClient for certificate authen (we modified TSAClent class to support certificate authen method)*/
+    TSAClient clientCert = new TSAClient(new URL(tsaUrl),keystoreFile,keystorePassword,keystoreType,digest);
 		
-		/*Create TSAClient for username and password ( modified TSAClent class to support certificate authen method)*/
-		//TSAClient clientUsername = new TSAClient(new URL(tsaUrl),username, password, digest);
+    /*Create TSAClient for username and password ( modified TSAClent class to support certificate authen method)*/
+    //TSAClient clientUsername = new TSAClient(new URL(tsaUrl),username, password, digest);
+	
+    /*Example data directly from byte*/
+    byte[] data = "testcontent".getBytes("UTF-8");		
 		
-		/*Example data directly from byte*/
-		byte[] data = "testcontent".getBytes("UTF-8");		
-		
-		/*get TimeStampToken*/ 
-		byte[] clientByte =  clientCert.getTimeStampToken(messageDigest);
+    /*get TimeStampToken*/ 
+    byte[] clientByte =  clientCert.getTimeStampToken(messageDigest);
