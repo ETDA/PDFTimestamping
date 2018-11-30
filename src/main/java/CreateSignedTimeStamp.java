@@ -146,7 +146,10 @@ public class CreateSignedTimeStamp implements SignatureInterface {
         }
         catch (NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException | KeyStoreException | CertificateException e)
         {
-            LOG.error("Hashing-Algorithm not found for TimeStamping", e);
+            //LOG.error("Hashing-Algorithm not found for TimeStamping", e);
+        	//write log file
+        	writeFile wrFile = new writeFile();
+			wrFile.readAndWrite(e);
         }
         return new byte[] {};
     }
