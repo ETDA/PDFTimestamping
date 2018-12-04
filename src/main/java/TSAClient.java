@@ -108,7 +108,7 @@ public class TSAClient
      * @throws KeyManagementException 
      * @throws UnrecoverableKeyException 
      */
-    public byte[] getTimeStampToken(byte[] messageImprint) throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
+    public byte[] getTimeStampToken(byte[] messageImprint) throws TSPException, IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
     {
         digest.reset();
         byte[] hash = digest.digest(messageImprint);
@@ -141,7 +141,7 @@ public class TSAClient
         }
         catch (TSPException e)
         {
-            throw new IOException(e);
+            throw e;
         }
         
         TimeStampToken token = response.getTimeStampToken();

@@ -18,6 +18,7 @@ import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.PDSignature;
 import org.apache.pdfbox.pdmodel.interactive.digitalsignature.SignatureInterface;
+import org.bouncycastle.tsp.TSPException;
 
 
 /**
@@ -40,7 +41,6 @@ public class CreateSignedTimeStamp implements SignatureInterface {
     public   String keystorePath;
     public  String keystorePassword;
     public  String keystoreType;
-
     /**
      * Initialize the signed timestamp creator
      * 
@@ -91,6 +91,8 @@ public class CreateSignedTimeStamp implements SignatureInterface {
              FileOutputStream fos = new FileOutputStream(outFile))
         {
             signDetached(doc, fos);
+        }catch(Exception e) {
+        	throw e;
         }
     }
     
@@ -144,13 +146,13 @@ public class CreateSignedTimeStamp implements SignatureInterface {
         		return validation.getTimeStampToken(content);
         	}
         }
-        catch (NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException | KeyStoreException | CertificateException e)
+        catch (NoSuchAlgorithmException | UnrecoverableKeyException | KeyManagementException | KeyStoreException | CertificateException | TSPException e)
         {
             //LOG.error("Hashing-Algorithm not found for TimeStamping", e);
         	//write log file
         	writeFile wrFile = new writeFile();
-			wrFile.readAndWrite(e);
-        }
+			wrFile.excepToString(e);
+        } 
         return new byte[] {};
     }
 

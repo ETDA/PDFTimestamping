@@ -9,6 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class writeFile {
+	private String inputFile = null;
+	private String tsaUrl = null;
+	private String keystoreFile = null;
 	private String fileLogName = "PDFTimestamp_log.txt";
 	private Exception e; 
 	
@@ -16,15 +19,17 @@ public class writeFile {
 		super();
 	}
 
-	public void readAndWrite(Exception e) {
-		StringWriter sw = new StringWriter();
-		PrintWriter pw = new PrintWriter(sw);
-		e.printStackTrace(pw);
-		String msError = sw.toString();
-		readAndWrite(msError);
+	public void setInputFile(String inputFile) {
+		this.inputFile = inputFile;
+	}
+	public void setTsaUrl(String tsaUrl) {
+		this.tsaUrl = tsaUrl;
+	}
+	public void setKeystoreFile(String keystoreFile) {
+		this.keystoreFile = keystoreFile;
 	}
 	
-	public void readAndWrite(String e) {
+	public void readAndWrite_DateAndMessage() {
 		File oldLog = new File(fileLogName);
 		//dateTime
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -34,27 +39,58 @@ public class writeFile {
 		if (!oldLog.exists()) {
 			try {
 				oldLog.createNewFile();
-			} catch (Exception eIO) {
-				System.out.println(eIO);
+			} catch (Exception e) {
+				//Can't create file
+				System.out.println(e);
+				end();
 			}
-		} 
+		}
 		//read&write
 		try {
 			BufferedWriter buf = new BufferedWriter(new FileWriter(oldLog, true));
-			buf.newLine();
 			buf.append(msTime);
 			buf.newLine();
-			buf.append(e);
+			buf.append("inputFile: "+inputFile+", tsaUrl: "+tsaUrl+", keystoreFile: "+keystoreFile);
 			buf.newLine();
 			buf.close();
-			System.out.println("********End process**********");
-			System.exit(0);	
-		}	
-			catch (IOException eIO) {
-			System.out.println(eIO);
-		} 	catch (Exception ex) {
-			readAndWrite(ex);
+		}catch (Exception e) {
+			System.out.println(e);
+			end();
+		} 	
+	}
+	public void readAndWrite_mesLog(String mesLog) {
+		File oldLog = new File(fileLogName);
+		if (!oldLog.exists()) {
+			try {
+				readAndWrite_DateAndMessage();
+			} catch (Exception e) {
+				//Can't create file
+				System.out.println(e);
+				end();
+			}
 		}
-		
+		try {
+			BufferedWriter buf = new BufferedWriter(new FileWriter(oldLog, true));
+			buf.append(mesLog);
+			buf.newLine();
+			buf.close();
+			end();
+		}catch (Exception e) {
+			System.out.println(e);
+			end();
+		} 	
+	}
+	
+	public void excepToString(Exception e) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		e.printStackTrace(pw);
+		String msError = sw.toString();
+		readAndWrite_mesLog(msError);
+	}
+	
+	public void end() {
+		System.out.println("********End process**********");
+		System.exit(0);
 	}
 }

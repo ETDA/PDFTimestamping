@@ -25,13 +25,16 @@ public class main {
 		 * "https://test.time.teda.th"; String keystoreFile = ""; String
 		 * keystorePassword = ""; String keystoreType = "";
 		 */
+		writeFile wrFile = new writeFile();
 		try {
 			String inputFile = args[0];
+			wrFile.setInputFile(inputFile);
 			String tsaUrl = args[1];
+			wrFile.setTsaUrl(tsaUrl);
 			String keystoreFile = args[2];
+			wrFile.setKeystoreFile(keystoreFile);
 			String keystorePassword = args[3];
 			String keystoreType = args[4];
-
 			// sign PDF (Certificate authen)
 			CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl, keystoreFile, keystorePassword,
 					keystoreType);
@@ -43,21 +46,19 @@ public class main {
 			File inFile = new File(inputFile);
 			String name = inFile.getName();
 			String substring = name.substring(0, name.lastIndexOf('.'));
-			String msDone = "********TimeStamp Done**********";
+			String msDone = "********TimeStamp Done**********"+System.getProperty("line.separator");
 			File outFile = new File(inFile.getParent(), substring + "_timestamped.pdf");
+			wrFile.readAndWrite_DateAndMessage();
 			try {
 				signing.signDetached(inFile, outFile);
-				writeFile wrFile = new writeFile();
-				wrFile.readAndWrite(msDone);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				wrFile.readAndWrite_mesLog(msDone);
+			} catch (Exception e) {
 				// e.printStackTrace();
-				writeFile wrFile = new writeFile();
-				wrFile.readAndWrite(e);
+				wrFile.excepToString(e);
 			}
 		} catch (Exception ex) {
-			writeFile wrFile = new writeFile();
-			wrFile.readAndWrite(ex);
+			wrFile.readAndWrite_DateAndMessage();
+			wrFile.excepToString(ex);
 		}
 		// System.out.println("********TimeStamp Done**********");
 	}
