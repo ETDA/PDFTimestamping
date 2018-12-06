@@ -13,7 +13,6 @@ public class writeFile {
 	private String tsaUrl = null;
 	private String keystoreFile = null;
 	private String fileLogName = "PDFTimestamp_log.txt";
-	private Exception e; 
 	
 	public writeFile() {
 		super();
