@@ -25,7 +25,7 @@ public class main {
 		 * "https://test.time.teda.th"; String keystoreFile = ""; String
 		 * keystorePassword = ""; String keystoreType = "";
 		 */
-		writeFile wrFile = new writeFile();
+		LogFileWriter wrFile = new LogFileWriter();
 		try {
 			String inputFile = args[0];
 			wrFile.setInputFile(inputFile);
@@ -35,9 +35,10 @@ public class main {
 			wrFile.setKeystoreFile(keystoreFile);
 			String keystorePassword = args[3];
 			String keystoreType = args[4];
+			String LogType = args[5];
+			wrFile.setType_out(LogType);
 			// sign PDF (Certificate authen)
-			CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl, keystoreFile, keystorePassword,
-					keystoreType);
+			CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl, keystoreFile, keystorePassword,keystoreType,LogType);
 
 			// sign PDF (Username , Password authen)
 			// CreateSignedTimeStamp signing = new

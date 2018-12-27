@@ -41,6 +41,7 @@ public class CreateSignedTimeStamp implements SignatureInterface {
     public   String keystorePath;
     public  String keystorePassword;
     public  String keystoreType;
+    private String logType;
     /**
      * Initialize the signed timestamp creator
      * 
@@ -53,12 +54,13 @@ public class CreateSignedTimeStamp implements SignatureInterface {
         this.tsaPassword = tsaPassword;
     }
     
-    public CreateSignedTimeStamp(String tsaUrl,String keystorePath,String keystorePassword,String keystoreType )
+    public CreateSignedTimeStamp(String tsaUrl,String keystorePath,String keystorePassword,String keystoreType,String logType )
     {
         this.tsaUrl = tsaUrl;
         this.keystorePath = keystorePath;
         this.keystorePassword = keystorePassword;
         this.keystoreType = keystoreType;
+        this.logType = logType;
     }
     
     /**
@@ -150,7 +152,8 @@ public class CreateSignedTimeStamp implements SignatureInterface {
         {
             //LOG.error("Hashing-Algorithm not found for TimeStamping", e);
         	//write log file
-        	writeFile wrFile = new writeFile();
+        	LogFileWriter wrFile = new LogFileWriter();
+        	wrFile.setType_out(logType);
 			wrFile.excepToString(e);
         } 
         return new byte[] {};
