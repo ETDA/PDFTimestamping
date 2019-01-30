@@ -42,6 +42,7 @@ import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.cms.CMSSignedData;
 import org.bouncycastle.cms.SignerInformation;
 import org.bouncycastle.cms.SignerInformationStore;
+import org.bouncycastle.tsp.TSPException;
 
 /**
  * This class wraps the TSAClient and the work that has to be done with it. Like Adding Signed
@@ -88,8 +89,9 @@ public class ValidationTimeStamp
      * @throws KeyStoreException 
      * @throws KeyManagementException 
      * @throws UnrecoverableKeyException 
+     * @throws TSPException 
      */
-    public byte[] getTimeStampToken(InputStream content) throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
+    public byte[] getTimeStampToken(InputStream content) throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException, TSPException
     {
         return tsaClient.getTimeStampToken(IOUtils.toByteArray(content));
     }
@@ -105,9 +107,10 @@ public class ValidationTimeStamp
      * @throws KeyStoreException 
      * @throws KeyManagementException 
      * @throws UnrecoverableKeyException 
+     * @throws TSPException 
      */
     public CMSSignedData addSignedTimeStamp(CMSSignedData signedData)
-            throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
+            throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException, TSPException
     {
         SignerInformationStore signerStore = signedData.getSignerInfos();
         List<SignerInformation> newSigners = new ArrayList<>();
@@ -134,9 +137,10 @@ public class ValidationTimeStamp
      * @throws KeyStoreException 
      * @throws KeyManagementException 
      * @throws UnrecoverableKeyException 
+     * @throws TSPException 
      */
     private SignerInformation signTimeStamp(SignerInformation signer)
-            throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException
+            throws IOException, UnrecoverableKeyException, KeyManagementException, KeyStoreException, NoSuchAlgorithmException, CertificateException, TSPException
     {
         AttributeTable unsignedAttributes = signer.getUnsignedAttributes();
 
