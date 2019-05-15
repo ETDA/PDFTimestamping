@@ -22,7 +22,7 @@ public class main {
 		/**** Sample Input for certificate authen ****/
 		/*
 		 * username/password String inputFile = resources/pdfA3.pdf; String tsaUrl =
-		 * "https://test.time.teda.th"; String keystoreFile = ""; String
+		 * "https://time-test.teda.th"; String keystoreFile = ""; String
 		 * keystorePassword = ""; String keystoreType = "";
 		 */
 		LogFileWriter wrFile = new LogFileWriter();
