@@ -10,20 +10,31 @@ public class main {
 
 		/**** Sample Input for username password authen ****/
 		/*
-		 * username/password String inputFile = resources/pdfA3.pdf; String tsaUrl =
-		 * "http://test.time.teda.th"; String tsaUsername = ""; String tsaPassword = "";
+		 * username/password 
+		 * String inputFile = resources/pdfA3.pdf; 
+		 * String tsaUrl = "http://test.time.teda.th"; 
+		 * String tsaUsername = ""; 
+		 * String tsaPassword = "";
+		 * 
 		 */
 
 		/*
-		 * String inputFile = args[0]; String tsaUrl = args[1]; String tsaUsername =
-		 * args[2]; String tsaPassword = args[3];
+		 * String inputFile = args[0]; 
+		 * String tsaUrl = args[1]; 
+		 * String tsaUsername = args[2]; 
+		 * String tsaPassword = args[3];
 		 */
 
 		/**** Sample Input for certificate authen ****/
 		/*
-		 * username/password String inputFile = resources/pdfA3.pdf; String tsaUrl =
-		 * "https://test.time.teda.th"; String keystoreFile = ""; String
-		 * keystorePassword = ""; String keystoreType = "";
+		 * username/password 
+		 * String inputFile = resources/pdfA3.pdf; 
+		 * String tsaUrl = "https://time-test.teda.th"; 
+		 * String keystoreFile = "KeystoreFile"; 
+		 * String keystorePassword = "KeystorePassword"; 
+		 * String keystoreType = "PKCS12";
+		 * String LogType = "1";
+		 * 	LogType support only "1" or "2" (for Console log, WriteLogFile)
 		 */
 		LogFileWriter wrFile = new LogFileWriter();
 		try {
@@ -41,8 +52,7 @@ public class main {
 			CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl, keystoreFile, keystorePassword,keystoreType,LogType);
 
 			// sign PDF (Username , Password authen)
-			// CreateSignedTimeStamp signing = new
-			// CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
+			// CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
 
 			File inFile = new File(inputFile);
 			String name = inFile.getName();
