@@ -43,11 +43,7 @@ public class main {
 			CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl, keystoreFile, keystorePassword,keystoreType,LogType);
 
 			// sign PDF (Username , Password authen)
-			/* 
-			 *  CreateSignedTimeStamp signing = new
-			 *  CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
-			 *  
-			 */
+			// CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,tsaUsername,tsaPassword);
 
 			File inFile = new File(inputFile);
 			String name = inFile.getName();

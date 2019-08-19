@@ -9,7 +9,7 @@
 - Eclipse Oxygen with Maven 
 
 ## Maven Dependencies
-- Apache PDFBox 2.0.7
+- Apache PDFBox 2.0.15
 - Bouncy Castle 1.59
 
 ## Getting started
@@ -41,8 +41,9 @@
     * keystoreFile : Keystore File (ex.Keystore.p12)
     * keystorePassword : Keystore file password
     * keystoreType : Keystore type (ex. PKCS12)
+    * LogType : Log type (LogType support only "1" or "2" (for Console log, WriteLogFile) ex."1")
     */
-    CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,keystoreFile,keystorePassword,keystoreType);
+    CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl,keystoreFile,keystorePassword,keystoreType,LogType);
     
     /*Set Input Instance*/  
     File inFile = new File(inputFile);
