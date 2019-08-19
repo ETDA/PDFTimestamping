@@ -9,33 +9,23 @@ public class main {
 	{
 
 		/**** Sample Input for username password authen ****/
-		/*
-		 * username/password 
-		 * String inputFile = resources/pdfA3.pdf; 
-		 * String tsaUrl = "http://test.time.teda.th"; 
-		 * String tsaUsername = ""; 
-		 * String tsaPassword = "";
-		 * 
-		 */
-
-		/*
-		 * String inputFile = args[0]; 
-		 * String tsaUrl = args[1]; 
-		 * String tsaUsername = args[2]; 
-		 * String tsaPassword = args[3];
+		/*  
+		 * String inputFile = resources/pdfA3.pdf;
+		 * String tsaUrl = "https://time-test.teda.th"; 
+		 * String tsaUsername = "tsaUsername"; 
+		 * String tsaPassword = "tsaPassword";
 		 */
 
 		/**** Sample Input for certificate authen ****/
 		/*
-		 * username/password 
 		 * String inputFile = resources/pdfA3.pdf; 
-		 * String tsaUrl = "https://time-test.teda.th"; 
-		 * String keystoreFile = "KeystoreFile"; 
-		 * String keystorePassword = "KeystorePassword"; 
+		 * String tsaUrl = "https://time-test.teda.th";
+		 * String keystoreFile = "keystoreFile.p12";
+		 * String keystorePassword = "keystorePassword";
 		 * String keystoreType = "PKCS12";
-		 * String LogType = "1";
-		 * 	LogType support only "1" or "2" (for Console log, WriteLogFile)
+		 * String LogType "1"; // 1:not write logfile , 2 : write log to file
 		 */
+
 		LogFileWriter wrFile = new LogFileWriter();
 		try {
 			String inputFile = args[0];
@@ -48,6 +38,7 @@ public class main {
 			String keystoreType = args[4];
 			String LogType = args[5];
 			wrFile.setType_out(LogType);
+			
 			// sign PDF (Certificate authen)
 			CreateSignedTimeStamp signing = new CreateSignedTimeStamp(tsaUrl, keystoreFile, keystorePassword,keystoreType,LogType);
 
