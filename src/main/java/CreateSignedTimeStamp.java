@@ -212,17 +212,18 @@ public class CreateSignedTimeStamp implements SignatureInterface {
 			for (Map.Entry<Principal, X509Certificate> entry : certificates.entrySet()) {
 				X509Certificate cert = entry.getValue();
 				if (!cert.getIssuerDN().equals(cert.getSubjectDN())) {
+					
 					X509Certificate issuerCert = certificates.get(cert.getIssuerDN());
-					if(issuerCert != null) {
-						OCSPResp ocspResp;
-						ocspResp = new GetOcspResp().getOcspResp(cert, issuerCert);
-						if (ocspResp != null) {
-							ocspList.add(ocspResp);
-						}
+					if(issuerCert == null) {
+						issuerCert = new GetOcspResp().getIssuerCert(cert);
 					}
-					crlList.addAll(new DssHelper().readCRLsFromCert(cert));
+					OCSPResp ocspResp = new GetOcspResp().getOcspResp(cert, issuerCert);
+					if (ocspResp != null) {
+						ocspList.add(ocspResp);
+					}
 				}
 			}
+			crlList.addAll(new DssHelper().readCRLsFromCert(certificate));
 			byte[][] crls = new byte[crlList.size()][];
 			for (int i = 0; i < crlList.size(); i++) {
 				crls[i] = ((X509CRL) crlList.get(i)).getEncoded();
