@@ -11,6 +11,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.Principal;
 import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
 import org.bouncycastle.asn1.ASN1InputStream;
@@ -126,6 +128,48 @@ public class GetOcspResp {
 
 			DERIA5String derStr = DERIA5String.getInstance((ASN1TaggedObject) name.toASN1Primitive(), false);
 			return derStr.getString();
+		}
+
+		return null;
+
+	}
+	
+	@SuppressWarnings("resource") X509Certificate getIssuerCert(X509Certificate certificate) throws IOException {
+		byte[] obj;
+		obj = certificate.getExtensionValue(Extension.authorityInfoAccess.getId());
+
+		if (obj == null) {
+			return null;
+		}
+
+		AuthorityInformationAccess authorityInformationAccess;
+		DEROctetString oct = (DEROctetString) (new ASN1InputStream(new ByteArrayInputStream(obj)).readObject());
+		authorityInformationAccess = AuthorityInformationAccess
+				.getInstance(new ASN1InputStream(oct.getOctets()).readObject());
+
+		AccessDescription[] accessDescriptions = authorityInformationAccess.getAccessDescriptions();
+		for (AccessDescription accessDescription : accessDescriptions) {
+			if (accessDescription.getAccessMethod().equals(X509ObjectIdentifiers.id_ad_caIssuers)) {
+		        GeneralName location = accessDescription.getAccessLocation();
+		        if (location.getTagNo() == GeneralName.uniformResourceIdentifier) {
+		            String issuerUrl = location.getName().toString();
+		            // http URL to issuer (test in your browser to see if it's a valid certificate)
+		            // you can use java.net.URL.openStream() to create a InputStream and create
+		            // the certificate with your CertificateFactory
+		            URL url = new URL(issuerUrl);
+		            CertificateFactory certificateFactory;
+		            X509Certificate issuer = null;
+		            try {
+		            	certificateFactory = CertificateFactory.getInstance("X.509");
+						issuer = (X509Certificate) certificateFactory.generateCertificate(url.openStream());
+						
+					} catch (CertificateException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} 
+		            return issuer;
+		        }
+		    }
 		}
 
 		return null;
