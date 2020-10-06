@@ -1,6 +1,4 @@
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -90,10 +88,10 @@ public class CreateSignedTimeStamp implements SignatureInterface {
 	public void signDetached(File file) throws IOException {
 		signDetached(file, file);
 		
-//		PDDocument doc = PDDocument.load(file); 
-//		FileOutputStream fos = new FileOutputStream(file);
-//		makeLTV(doc);
-//		doc.saveIncremental(fos);
+		PDDocument doc = PDDocument.load(file); 
+		FileOutputStream fos = new FileOutputStream(file);
+		makeLTV(doc);
+		doc.saveIncremental(fos);
 	}
 
 	/**
@@ -109,18 +107,14 @@ public class CreateSignedTimeStamp implements SignatureInterface {
 		}
 
 		// sign
-		InputStream is;
-		try (PDDocument doc = PDDocument.load(inFile); ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-
-			signDetached(doc, bos);
-			doc.close();
-			is = new ByteArrayInputStream(bos.toByteArray());
-
+		try (PDDocument doc = PDDocument.load(inFile); FileOutputStream fos = new FileOutputStream(outFile)) {
+			
+			signDetached(doc, fos);
 		} catch (Exception e) {
 			throw e;
 		}
-
-		PDDocument doc = PDDocument.load(is);
+		
+		PDDocument doc = PDDocument.load(outFile); 
 		FileOutputStream fos = new FileOutputStream(outFile);
 		makeLTV(doc);
 		doc.saveIncremental(fos);
