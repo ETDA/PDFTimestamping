@@ -115,6 +115,7 @@ public class CreateSignedTimeStamp implements SignatureInterface {
 			throw e;
 		}
 
+		//Timestamp LTV
 		PDDocument doc = PDDocument.load(is);
 		FileOutputStream fos = new FileOutputStream(outFile);
 		makeLTV(doc);
